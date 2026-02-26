@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    // Inject the current pathname as a header so server components can read it
+    // Inject the current pathname as a header so server components can read it for active states
     const headers = new Headers(request.headers);
     headers.set('x-pathname', request.nextUrl.pathname);
     return NextResponse.next({ request: { headers } });
 }
 
 export const config = {
-    matcher: '/client-portal/:path*',
+    matcher: ['/client-portal/:path*', '/candidate-portal/:path*'],
 };
