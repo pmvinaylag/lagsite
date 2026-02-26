@@ -66,16 +66,32 @@ export default function CandidateInterviews() {
                             </div>
                         </div>
 
-                        {/* Post-Interview Pulse (Locked/Active depending on state) */}
-                        <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-8 flex gap-6 mt-8 opacity-50 grayscale pointer-events-none">
-                            <div className="w-12 h-12 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center flex-shrink-0 text-gray-400">
-                                🔒
+                        {/* Post-Interview Pulse (Unlocked) */}
+                        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50/30 shadow-sm p-8 mt-8">
+                            <div className="flex gap-6 mb-6">
+                                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-600">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-medium text-[var(--color-brand-dark)] mb-2">Post-Interview Pulse Unlocked!</h3>
+                                    <p className="text-sm text-gray-500 font-light leading-relaxed">
+                                        You just completed your first round with Acme Corp. Help us negotiate on your behalf by instantly letting us know how you felt about the conversation.
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-medium text-[var(--color-brand-dark)] mb-2">Post-Interview Pulse</h3>
-                                <p className="text-sm text-gray-500 font-light leading-relaxed mb-4">
-                                    This unlocks 30 minutes after your interview. Help us negotiate on your behalf by instantly letting us know how you felt about the conversation.
-                                </p>
+
+                            {/* The Thumbs Up / Down Survey */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <button className="flex flex-col items-center justify-center p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-500 hover:bg-emerald-50 hover:shadow-md transition-all group">
+                                    <span className="text-4xl mb-3 group-hover:scale-110 transition-transform text-emerald-500">👍</span>
+                                    <span className="text-sm font-medium text-[var(--color-brand-dark)]">Crushed It</span>
+                                    <span className="text-xs text-gray-400 font-light mt-1 text-center">I want to move forward.</span>
+                                </button>
+                                <button className="flex flex-col items-center justify-center p-6 rounded-xl border border-gray-200 bg-white hover:border-rose-500 hover:bg-rose-50 hover:shadow-md transition-all group">
+                                    <span className="text-4xl mb-3 group-hover:scale-110 transition-transform text-rose-500">👎</span>
+                                    <span className="text-sm font-medium text-[var(--color-brand-dark)]">Not a Fit</span>
+                                    <span className="text-xs text-gray-400 font-light mt-1 text-center">Pull my application.</span>
+                                </button>
                             </div>
                         </div>
 
