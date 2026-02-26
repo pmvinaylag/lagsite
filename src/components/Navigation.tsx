@@ -51,6 +51,12 @@ export default function Navigation() {
 
                 <div className="hidden md:flex items-center space-x-4">
                     <Link
+                        href="/candidate-portal"
+                        className="text-sm tracking-wide uppercase font-medium text-gray-500 hover:text-[#FF801E] transition-colors"
+                    >
+                        Candidate Portal
+                    </Link>
+                    <Link
                         href="/client-portal"
                         className="text-sm tracking-wide uppercase font-medium text-gray-500 hover:text-[#FF801E] transition-colors"
                     >
@@ -92,6 +98,13 @@ export default function Navigation() {
                             {link.name}
                         </Link>
                     ))}
+                    <Link
+                        href="/candidate-portal"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-sm tracking-wide uppercase font-medium text-gray-800 hover:text-[#FF801E]"
+                    >
+                        Candidate Portal
+                    </Link>
                     <Link
                         href="/client-portal"
                         onClick={() => setIsMobileMenuOpen(false)}
