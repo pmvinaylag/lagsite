@@ -1,6 +1,43 @@
 import Link from 'next/link';
+import { getHubSpotDeals, HIRING_STAGES } from '@/lib/hubspot';
 
-export default function CandidateDashboard() {
+export default async function CandidateDashboard() {
+    let deals = await getHubSpotDeals(5);
+
+    // Fallback if no real live deals are fetched (e.g. absent API keys for demo mode)
+    if (deals.length === 0) {
+        deals = [
+            {
+                id: 'mock-1',
+                dealname: 'John Doe',
+                dealstage: '3242746600', // Screening Call
+                stageName: '3. Screening Call',
+                pipeline: 'default',
+                client: 'Acme Corp (Stealth)',
+                role: 'Director of Cloud Infrastructure',
+                clientSlug: 'acme-corp',
+            },
+            {
+                id: 'mock-2',
+                dealname: 'John Doe',
+                dealstage: '3242746601', // Rejected
+                stageName: '7. Rejected / Dropped',
+                pipeline: 'default',
+                client: 'Global Retailer',
+                role: 'Head of Data Platform',
+                clientSlug: 'global-retailer',
+            }
+        ];
+    }
+
+    const stagesOrder = Object.keys(HIRING_STAGES)
+        .filter(id => id !== '3242746601') // omit rejected from progress line
+        .sort((a, b) => {
+            const numA = parseInt(HIRING_STAGES[a].split('.')[0]);
+            const numB = parseInt(HIRING_STAGES[b].split('.')[0]);
+            return numA - numB;
+        });
+
     return (
         <div className="bg-[#F8F9FA] min-h-[calc(100vh-140px)]">
             <div className="max-w-screen-xl mx-auto px-8 py-12">
@@ -60,90 +97,95 @@ export default function CandidateDashboard() {
                     <h2 className="text-xl font-medium text-[var(--color-brand-dark)] mb-6">Active Submissions</h2>
 
                     <div className="grid gap-6">
-
-                        {/* Application Card 1 */}
-                        <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-8 group transition-shadow hover:shadow-md">
-                            <div className="flex items-start justify-between mb-8">
-                                <div>
-                                    <h3 className="text-xl font-medium text-[var(--color-brand-dark)] mb-1">Director of Cloud Infrastructure</h3>
-                                    <p className="text-sm text-gray-400 font-light flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Acme Corp (Stealth) · Paris / Hybrid
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Requested Salary</p>
-                                    <p className="text-lg font-light text-[var(--color-brand-dark)]">€145K</p>
-                                </div>
-                            </div>
-
-                            {/* Status Pipeline Tracker */}
-                            <div className="relative">
-                                {/* Track Line */}
-                                <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 -z-10 rounded-full"></div>
-                                {/* Active Line */}
-                                <div className="absolute top-1/2 left-0 w-[50%] h-1 bg-[var(--color-brand-orange)] -translate-y-1/2 -z-10 rounded-full transition-all duration-1000"></div>
-
-                                <div className="flex justify-between relative">
-                                    {/* Step 1 */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-6 h-6 rounded-full bg-[var(--color-brand-orange)] border-4 border-white shadow-sm flex items-center justify-center text-white">
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+                        {deals.map(deal => {
+                            const isRejected = deal.dealstage === '3242746601';
+                            if (isRejected) {
+                                return (
+                                    <div key={deal.id} className="rounded-2xl border border-gray-100 bg-white/60 shadow-sm p-8 opacity-70">
+                                        <div className="flex items-start justify-between mb-8">
+                                            <div>
+                                                <h3 className="text-xl font-medium text-gray-600 mb-1 line-through decoration-gray-300">{deal.role || 'Unknown Role'}</h3>
+                                                <p className="text-sm text-gray-400 font-light flex items-center gap-2">
+                                                    {deal.client || 'Unknown Client'}
+                                                </p>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="text-[10px] uppercase tracking-widest font-semibold text-rose-500 bg-rose-50 border border-rose-100 px-3 py-1 rounded">
+                                                    Closed
+                                                </span>
+                                            </div>
                                         </div>
-                                        <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--color-brand-dark)] mt-2">Agency Screen</span>
-                                        <span className="text-xs text-gray-400 font-light mt-0.5">Oct 12</span>
                                     </div>
-                                    {/* Step 2 */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-6 h-6 rounded-full bg-[var(--color-brand-orange)] border-4 border-white shadow-sm flex items-center justify-center text-white">
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+                                );
+                            }
+
+                            const currentStageIndex = stagesOrder.indexOf(deal.dealstage);
+                            const completionPercentage = currentStageIndex > 0 ? (currentStageIndex / (stagesOrder.length - 1)) * 100 : 0;
+
+                            return (
+                                <div key={deal.id} className="rounded-2xl border border-gray-100 bg-white shadow-sm p-8 group transition-shadow hover:shadow-md">
+                                    <div className="flex items-start justify-between mb-8">
+                                        <div>
+                                            <h3 className="text-xl font-medium text-[var(--color-brand-dark)] mb-1">{deal.role || 'Unknown Role'}</h3>
+                                            <p className="text-sm text-gray-400 font-light flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> {deal.client || 'Confidential Client'}
+                                            </p>
                                         </div>
-                                        <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--color-brand-dark)] mt-2">Client Review</span>
-                                        <span className="text-xs text-gray-400 font-light mt-0.5">Oct 14</span>
+                                        <div className="text-right">
+                                            <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Company</p>
+                                            <p className="text-lg font-light text-[var(--color-brand-dark)]">{deal.client}</p>
+                                        </div>
                                     </div>
-                                    {/* Step 3 (Current) */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-6 h-6 rounded-full bg-[var(--color-brand-dark)] border-4 border-white shadow-sm flex items-center justify-center animate-pulse"></div>
-                                        <span className="text-[10px] uppercase tracking-wider font-bold text-[var(--color-brand-orange)] mt-2">Interview 1</span>
-                                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 border border-emerald-100 cursor-pointer hover:bg-emerald-100 transition-colors">
-                                            ACTION: Schedule
-                                        </span>
-                                    </div>
-                                    {/* Step 4 */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-6 h-6 rounded-full bg-gray-200 border-4 border-white shadow-sm"></div>
-                                        <span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 mt-2">Final Round</span>
-                                    </div>
-                                    {/* Step 5 */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-6 h-6 rounded-full bg-gray-200 border-4 border-white shadow-sm"></div>
-                                        <span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 mt-2">Offer</span>
+
+                                    {/* Status Pipeline Tracker */}
+                                    <div className="relative">
+                                        {/* Track Line */}
+                                        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 -z-10 rounded-full"></div>
+                                        {/* Active Line */}
+                                        <div
+                                            className="absolute top-1/2 left-0 h-1 bg-[var(--color-brand-orange)] -translate-y-1/2 -z-10 rounded-full transition-all duration-1000"
+                                            style={{ width: `${completionPercentage}%` }}></div>
+
+                                        <div className="flex justify-between relative">
+                                            {stagesOrder.map((stageId, index) => {
+                                                const isCompleted = index < currentStageIndex;
+                                                const isCurrent = index === currentStageIndex;
+                                                const isFuture = index > currentStageIndex;
+                                                const label = HIRING_STAGES[stageId].split('. ')[1];
+
+                                                return (
+                                                    <div key={stageId} className="flex flex-col items-center relative z-10 w-12">
+                                                        {isCompleted && (
+                                                            <div className="w-6 h-6 rounded-full bg-[var(--color-brand-orange)] border-4 border-white shadow-sm flex items-center justify-center text-white">
+                                                                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+                                                            </div>
+                                                        )}
+                                                        {isCurrent && (
+                                                            <div className="w-6 h-6 rounded-full bg-[var(--color-brand-dark)] border-4 border-white shadow-sm flex items-center justify-center animate-pulse"></div>
+                                                        )}
+                                                        {isFuture && (
+                                                            <div className="w-6 h-6 rounded-full bg-gray-200 border-4 border-white shadow-sm"></div>
+                                                        )}
+                                                        <div className="absolute top-8 w-24 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                                                            <span className={`text-[10px] uppercase tracking-wider mt-2 text-center block ${isCurrent ? 'text-[var(--color-brand-orange)] font-bold' : isCompleted ? 'text-[var(--color-brand-dark)] font-semibold' : 'text-gray-400 font-medium'}`}>
+                                                                {label}
+                                                            </span>
+                                                            {isCurrent && (
+                                                                <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 border border-emerald-100 shadow-sm">
+                                                                    ACTION
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        {/* Padding to account for absolute positioned labels below */}
+                                        <div className="h-16"></div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* Application Card 2 (Passed) */}
-                        <div className="rounded-2xl border border-gray-100 bg-white/60 shadow-sm p-8 opacity-70">
-                            <div className="flex items-start justify-between mb-8">
-                                <div>
-                                    <h3 className="text-xl font-medium text-gray-600 mb-1 line-through decoration-gray-300">Head of Data Platform</h3>
-                                    <p className="text-sm text-gray-400 font-light flex items-center gap-2">
-                                        Global Retailer · Relocation to London
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <span className="text-[10px] uppercase tracking-widest font-semibold text-rose-500 bg-rose-50 border border-rose-100 px-3 py-1 rounded">
-                                        Closed
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-sm font-light text-gray-500">
-                                <span className="font-semibold text-gray-700">Client Feedback: </span>
-                                "Extremely strong cultural fit, but ultimately chose a candidate with explicit experience in high-frequency trading platforms. We want them in our talent pool for future architecture roles."
-                            </div>
-                        </div>
-
+                            );
+                        })}
                     </div>
                 </div>
 
