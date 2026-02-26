@@ -37,10 +37,10 @@ export default function Footer() {
                 <div>
                     <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-6 opacity-80">Capabilities</h3>
                     <ul className="space-y-4">
-                        <li><Link href="/services" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Executive Search</Link></li>
-                        <li><Link href="/services" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Sourcing-as-a-Service (SaaS)</Link></li>
-                        <li><Link href="/services" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Talent Infrastructure (TIaaS)</Link></li>
-                        <li><Link href="/services" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Advisory & Coaching</Link></li>
+                        <li><Link href="/services/executive-search" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Executive Search</Link></li>
+                        <li><Link href="/services/sourcing-as-a-service" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Sourcing-as-a-Service (SaaS)</Link></li>
+                        <li><Link href="/services/talent-infrastructure" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Talent Infrastructure (TIaaS)</Link></li>
+                        <li><Link href="/services/advisory-coaching" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Advisory & Coaching</Link></li>
                     </ul>
                 </div>
 
@@ -50,7 +50,7 @@ export default function Footer() {
                     <ul className="space-y-4">
                         <li><Link href="/about" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">About Us</Link></li>
                         <li><Link href="/jobs" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Career & Culture</Link></li>
-                        <li><Link href="/jobs" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Executive Portal</Link></li>
+                        <li><Link href="/client-portal" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Client Portal</Link></li>
                         <li><Link href="/contact" className="text-[#a0a5a3] hover:text-[#FF801E] text-sm transition-colors font-light">Contact Us</Link></li>
                     </ul>
                 </div>

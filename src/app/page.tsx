@@ -1,13 +1,14 @@
+import PublicLayout from '@/components/PublicLayout'
 import Link from 'next/link'
-import { getJobs } from '@/lib/webflow'
+import { getHubSpotJobs } from '@/lib/hubspot'
 
 export default async function Home() {
-  const jobs = await getJobs()
-  // Take the 2 most recent active jobs
+  const jobs = await getHubSpotJobs()
+  // Take the 2 most recent active jobs for the homepage preview
   const recentJobs = jobs.slice(0, 2)
 
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--color-brand-light)] overflow-hidden">
+    <PublicLayout>
       {/* Hero Section */}
       <section className="relative px-6 py-48 md:py-64 flex flex-col items-center justify-center text-center bg-[var(--color-brand-dark)] text-white mt-[-8rem]">
         <div className="max-w-5xl mx-auto relative z-10 w-full mt-20">
@@ -85,38 +86,46 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {recentJobs.map((job: any) => {
-              const data = job.fieldData;
-              return (
-                <Link
-                  href={`/jobs/${data.slug}`}
-                  key={job.id}
-                  className="group block p-10 rounded-2xl bg-white border border-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl shadow-sm"
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h3 className="text-3xl font-medium mb-3 text-[var(--color-brand-dark)]">{data.name.split(' (')[0]}</h3>
-                      <p className="text-gray-500 font-medium tracking-wide text-sm">{data.client}</p>
-                    </div>
-                    <span className="px-4 py-2 border border-gray-200 text-xs text-gray-500 font-medium tracking-wide uppercase rounded-sm">
-                      {data.location}
+            {recentJobs.map((job: any) => (
+              <Link
+                href={`/jobs/${job.slug}`}
+                key={job.id}
+                className="group block p-10 rounded-2xl bg-white border border-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl shadow-sm"
+              >
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-3xl font-medium mb-3 text-[var(--color-brand-dark)]">{job.subject?.split(' (')[0] || job.subject}</h3>
+                    <p className="text-[var(--color-brand-orange)] uppercase tracking-wider text-xs font-semibold flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-brand-orange)]"></span>
+                      Exclusive Search
+                    </p>
+                  </div>
+                  {job.priority === 'HIGH' && (
+                    <span className="px-3 py-1 bg-red-50 text-red-600 text-[10px] font-bold tracking-wider uppercase rounded-full whitespace-nowrap">
+                      Priority
                     </span>
+                  )}
+                </div>
+                <p className="text-gray-500 leading-relaxed line-clamp-2 text-base font-light mb-8 pt-4 border-t border-gray-100">
+                  {job.content?.replace(/<[^>]*>?/gm, '').trim()}
+                </p>
+                <div className="flex items-center text-[var(--color-brand-dark)] font-medium text-sm group-hover:text-[var(--color-brand-orange)] transition-colors">
+                  View Position
+                  <div className="ml-4 w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-[var(--color-brand-orange)]">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                   </div>
-                  <p className="text-gray-500 leading-relaxed line-clamp-2 text-base font-light mb-8">
-                    {data.description?.replace(/<[^>]*>?/gm, '')}
-                  </p>
-                  <div className="flex items-center text-[var(--color-brand-dark)] font-medium text-sm group-hover:text-[var(--color-brand-orange)] transition-colors">
-                    View Position
-                    <div className="ml-4 w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-[var(--color-brand-orange)]">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+                </div>
+              </Link>
+            ))}
           </div>
+
+          {recentJobs.length === 0 && (
+            <div className="col-span-2 text-center py-16">
+              <p className="text-gray-400 font-light">No active public roles at this time. Check back soon.</p>
+            </div>
+          )}
 
           <div className="mt-12 flex justify-center md:hidden">
             <Link href="/jobs" className="px-8 py-4 rounded-full border border-[var(--color-brand-dark)] text-[var(--color-brand-dark)] font-medium uppercase tracking-widest text-sm text-center w-full">
@@ -124,7 +133,26 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-      </section>
-    </div>
+    </section>
+
+    {/* Client Portal CTA */}
+    <section className="py-24 px-6 bg-[var(--color-brand-dark)] text-white">
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+          <p className="text-xs uppercase tracking-widest text-[var(--color-brand-orange)] mb-3 font-medium">For Our Clients</p>
+          <h2 className="text-4xl font-light tracking-tight mb-3">Live Pipeline Access</h2>
+          <p className="text-gray-400 font-light max-w-xl">
+            Your dedicated client portal gives you a real-time, anonymised view of your candidate pipeline — updated every 60 seconds.
+          </p>
+        </div>
+        <Link
+          href="/client-portal"
+          className="flex-shrink-0 px-8 py-4 rounded-full border border-white/30 text-white font-medium hover:bg-white hover:text-[var(--color-brand-dark)] transition-all uppercase tracking-widest text-sm whitespace-nowrap"
+        >
+          View Portal →
+        </Link>
+      </div>
+    </section>
+  </PublicLayout>
   )
 }

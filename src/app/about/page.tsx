@@ -7,28 +7,28 @@ export default async function AboutPage() {
             name: "Dr. Elena Rostova",
             role: "Strategic Advisor, EMEA",
             bio: "Specializing in cross-border technical acquisitions and EMEA market entry.",
-            image: "/team/elena.png"
+            image: "/team/elena.jpg"
         },
         {
             id: 2,
             name: "James Chen",
             role: "Board Advisor, APAC",
             bio: "Former Managing Director advising on APAC scaling and executive leadership.",
-            image: "/team/james.png"
+            image: "/team/james.jpg"
         },
         {
             id: 3,
             name: "Sarah Jenkins",
             role: "Leadership Advisor, Americas",
             bio: "Expert in organizational design, resilience, and C-suite succession planning.",
-            image: "/team/sarah.png"
+            image: "/team/sarah.jpg"
         },
         {
             id: 4,
             name: "David Okoro",
             role: "Technology Advisor",
             bio: "Veteran CTO advising on AI-native infrastructure and technical assessments.",
-            image: "/team/david.png"
+            image: "/team/david.jpg"
         }
     ]
 

@@ -35,7 +35,7 @@ export default function Navigation() {
                 {/* Desktop Links */}
                 <div className="hidden md:flex space-x-8 items-center bg-white">
                     {links.map((link) => {
-                        const isActive = pathname === link.href || (pathname.startsWith('/jobs') && link.href === '/jobs')
+                        const isActive = pathname === link.href || (pathname.startsWith('/jobs') && link.href === '/jobs') || (pathname.startsWith('/services') && link.href === '/services')
                         return (
                             <Link
                                 key={link.name}

@@ -1,4 +1,4 @@
-import { getJobBySlug } from '@/lib/webflow';
+import { getHubSpotJobBySlug } from '@/lib/hubspot';
 import Link from 'next/link';
 
 export default async function JobDetailPage({
@@ -8,7 +8,7 @@ export default async function JobDetailPage({
 }) {
     // Await params as required by Next.js 15+ for dynamic route segments
     const resolvedParams = await params;
-    const job = await getJobBySlug(resolvedParams.slug);
+    const job = await getHubSpotJobBySlug(resolvedParams.slug);
 
     if (!job) {
         return (
@@ -22,7 +22,7 @@ export default async function JobDetailPage({
         );
     }
 
-    const { name, client, location, description } = job.fieldData;
+    const { subject, client, location, content, priority } = job;
 
     return (
         <div className="bg-[var(--color-brand-light)] min-h-screen pb-32">
@@ -39,7 +39,7 @@ export default async function JobDetailPage({
                     </div>
 
                     <h1 className="text-4xl md:text-6xl font-light tracking-tight mb-6 leading-tight">
-                        {name}
+                        {subject}
                     </h1>
 
                     <div className="flex flex-wrap items-center gap-6 mt-10">
@@ -74,8 +74,8 @@ export default async function JobDetailPage({
                     </div>
 
                     <div
-                        className="prose prose-lg prose-gray max-w-none text-gray-600 font-light leading-relaxed prose-headings:font-normal prose-headings:text-[var(--color-brand-dark)] prose-a:text-[var(--color-brand-orange)]"
-                        dangerouslySetInnerHTML={{ __html: description || '<p>Detailed description not available.</p>' }}
+                        className="prose prose-lg prose-gray max-w-none text-gray-600 font-light leading-relaxed prose-headings:font-normal prose-headings:text-[var(--color-brand-dark)] prose-a:text-[var(--color-brand-orange)] whitespace-pre-wrap"
+                        dangerouslySetInnerHTML={{ __html: content || '<p>Detailed description not available.</p>' }}
                     />
 
                     <div className="mt-16 pt-10 border-t border-gray-100 flex flex-col items-center sm:items-start">
