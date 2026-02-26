@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../globals.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
@@ -36,16 +37,16 @@ export default async function CandidatePortalLayout({
 
                             {/* Brand + breadcrumb */}
                             <div className="flex items-center gap-4">
-                                <Link href="/" className="flex items-center gap-3 group" aria-label="L'Agence home">
-                                    <div className="grid grid-cols-2 gap-0.5 opacity-90 group-hover:opacity-100 transition-opacity">
-                                        <div className="w-2.5 h-2.5 rounded-sm bg-[var(--color-brand-orange)]"></div>
-                                        <div className="w-2.5 h-2.5 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                                        <div className="w-2.5 h-2.5 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                                        <div className="w-2.5 h-2.5 rounded-sm bg-[var(--color-brand-orange)]"></div>
+                                <Link href="/" className="flex items-center group" aria-label="L'Agence home">
+                                    <div className="relative h-6 w-32 hover:opacity-80 transition-opacity">
+                                        <Image
+                                            src="/logo-horizontal-black.png"
+                                            alt="L'AGENCE Executive"
+                                            fill
+                                            className="object-contain object-left"
+                                            priority
+                                        />
                                     </div>
-                                    <span className="font-light tracking-[0.15em] uppercase text-[var(--color-brand-dark)] text-xs">
-                                        L&apos;Agence
-                                    </span>
                                 </Link>
 
                                 <span className="text-gray-200 text-base font-thin">|</span>
@@ -66,8 +67,8 @@ export default async function CandidatePortalLayout({
                                                         key={item.label}
                                                         href={href}
                                                         className={`px-4 py-1 mx-0.5 rounded-full text-xs font-medium transition-all ${isActive
-                                                                ? 'bg-[var(--color-brand-orange)] text-white'
-                                                                : 'text-gray-500 hover:text-[var(--color-brand-dark)] hover:bg-gray-100'
+                                                            ? 'bg-[var(--color-brand-orange)] text-white'
+                                                            : 'text-gray-500 hover:text-[var(--color-brand-dark)] hover:bg-gray-100'
                                                             }`}
                                                     >
                                                         {item.label}

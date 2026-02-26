@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * Client Portal Entry Page
@@ -20,15 +21,15 @@ export default function ClientPortalEntryPage() {
 
                 {/* Logo mark */}
                 <div className="flex items-center gap-3 mb-12">
-                    <div className="grid grid-cols-2 gap-0.5">
-                        <div className="w-3 h-3 rounded-sm bg-[var(--color-brand-orange)]"></div>
-                        <div className="w-3 h-3 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                        <div className="w-3 h-3 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                        <div className="w-3 h-3 rounded-sm bg-[var(--color-brand-orange)]"></div>
+                    <div className="relative h-10 w-48">
+                        <Image
+                            src="/logo-horizontal-black.png"
+                            alt="L'AGENCE Executive"
+                            fill
+                            className="object-contain object-left"
+                            priority
+                        />
                     </div>
-                    <span className="font-light tracking-[0.15em] uppercase text-[var(--color-brand-dark)] text-sm">
-                        L&apos;Agence
-                    </span>
                 </div>
 
                 {/* Heading */}

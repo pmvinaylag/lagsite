@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function CandidateLogin() {
     return (
@@ -7,12 +8,15 @@ export default function CandidateLogin() {
 
                 {/* Branding / Header */}
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center gap-3 mb-6">
-                        <div className="grid grid-cols-2 gap-0.5">
-                            <div className="w-4 h-4 rounded-sm bg-[var(--color-brand-orange)]"></div>
-                            <div className="w-4 h-4 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                            <div className="w-4 h-4 rounded-sm border-2 border-[var(--color-brand-orange)]"></div>
-                            <div className="w-4 h-4 rounded-sm bg-[var(--color-brand-orange)]"></div>
+                    <div className="inline-flex items-center justify-center mb-6">
+                        <div className="relative h-12 w-56">
+                            <Image
+                                src="/logo-horizontal-black.png"
+                                alt="L'AGENCE Executive Logo"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
                         </div>
                     </div>
                     <h1 className="text-3xl font-light text-[var(--color-brand-dark)] tracking-tight mb-3">
