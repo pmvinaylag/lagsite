@@ -51,6 +51,12 @@ export default function Navigation() {
 
                 <div className="hidden md:flex items-center space-x-4">
                     <Link
+                        href="/client-portal"
+                        className="text-sm tracking-wide uppercase font-medium text-gray-500 hover:text-[#FF801E] transition-colors"
+                    >
+                        Client Portal
+                    </Link>
+                    <Link
                         href="/contact"
                         className="px-6 py-2.5 rounded-full bg-[#FF801E] text-white text-sm font-medium hover:bg-[#e66c10] transition-colors tracking-wide uppercase shadow-md"
                     >
@@ -86,6 +92,13 @@ export default function Navigation() {
                             {link.name}
                         </Link>
                     ))}
+                    <Link
+                        href="/client-portal"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-sm tracking-wide uppercase font-medium text-gray-800 hover:text-[#FF801E]"
+                    >
+                        Client Portal
+                    </Link>
                     <Link
                         href="/contact"
                         onClick={() => setIsMobileMenuOpen(false)}
